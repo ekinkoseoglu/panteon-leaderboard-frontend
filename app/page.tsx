@@ -1,31 +1,31 @@
-"use client"; // Bu satırı ekleyerek Client Component olduğunu belirtiyoruz.
+"use client";
 
 import React, { useState } from "react";
 import LeaderboardTable from "./components/LeaderboardTable";
 import SearchBar from "./components/SearchBar";
-import GroupButton from "./components/GroupButton";
+import Header from "./components/Layout/Header";
 
 const HomePage: React.FC = () => {
-  const [query, setQuery] = useState<string>("");
-  const [groupByCountry, setGroupByCountry] = useState<boolean>(false);
+  const [playerId, setPlayerId] = useState<number | null>(null);
 
-  const handleSearch = (searchQuery: string) => {
-    setQuery(searchQuery);
+  const togglePlayerId = (playerId: number) => {
+    setPlayerId(playerId);
   };
 
-  const toggleGroupByCountry = () => {
-    setGroupByCountry(!groupByCountry);
+  const resetPlayerId = () => {
+    setPlayerId(null);
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Leaderboard</h1>
-      <SearchBar onSearch={handleSearch} />
-      <GroupButton
-        onClick={toggleGroupByCountry}
-        groupByCountry={groupByCountry}
-      />
-      <LeaderboardTable query={query} /> {/* Removed groupByCountry */}
+    <div
+      style={{
+        textAlign: "center",
+        backgroundColor: "#392F63",
+      }}
+    >
+      <Header />
+      <SearchBar togglePlayerId={togglePlayerId} />
+      <LeaderboardTable playerId={playerId} />
     </div>
   );
 };

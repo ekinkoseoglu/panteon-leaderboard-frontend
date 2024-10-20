@@ -1,31 +1,52 @@
 import React, { useState } from "react";
+import SearchButton from "./UI/SearchButton";
+import { Tooltip } from "react-tooltip";
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  togglePlayerId: (playerId: number) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
+const SearchBar: React.FC<SearchBarProps> = ({ togglePlayerId }) => {
+  const [searchQuery, setSearchQuery] = useState<number>();
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSearchTerm(value);
-    onSearch(value);
+  const clickHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    console.log(searchQuery);
+
+    if (searchQuery !== undefined) {
+      togglePlayerId(searchQuery);
+    }
+
+    setSearchQuery(undefined);
   };
 
   return (
-    <input
-      type='text'
-      placeholder='Search players...'
-      value={searchTerm}
-      onChange={handleSearch}
-      style={{
-        padding: "10px",
-        margin: "20px",
-        borderRadius: "4px",
-        border: "1px solid #ccc",
-      }}
-    />
+    <form onSubmit={clickHandler} className='mt-5'>
+      <input
+        data-tooltip-id='my-tooltip'
+        data-tooltip-content='Lütfn oyuncu ID giriniz. (Örnek: 136456)'
+        data-tooltip-place='top-start'
+        type='number'
+        placeholder='Search players...'
+        onChange={(e) => setSearchQuery(parseInt(e.target.value))}
+        value={searchQuery || ""}
+        style={{
+          backgroundColor: "#251E40",
+          padding: "10px",
+          margin: "20px 0 20px 0",
+          borderRadius: "4px",
+          border: "1px solid #251E40",
+          width: "80%",
+          color: "white",
+          WebkitAppearance: "none",
+          MozAppearance: "textfield",
+          appearance: "textfield",
+        }}
+      />
+      <SearchButton isQueryIsNotEmpty={searchQuery !== null} />
+      <Tooltip id='my-tooltip' />
+    </form>
   );
 };
 
