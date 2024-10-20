@@ -23,12 +23,6 @@ interface LeaderboardTableProps {
   playerId: number | null;
 }
 
-const ResetButton = styled.button`
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 10px;
-`;
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,6 +31,14 @@ const Container = styled.div`
   color: #706f78;
   font-size: 1.2rem;
   font-weight: bold;
+
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 `;
 
 const FilterContainer = styled.div`
@@ -47,13 +49,60 @@ const FilterContainer = styled.div`
   padding: 10px;
   margin: 20px;
   width: 80%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 10px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 5px;
+  }
 `;
 
 const Table = styled.table`
   width: 100%;
-
   border-collapse: collapse;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
+`;
+
+const ResetButton = styled.button`
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+  }
+`;
+
+const NextWeekButton = styled.button`
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  margin-top: 20px;
+
+  @media (max-width: 768px) {
+    padding: 8px 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 6px 12px;
+  }
 `;
 
 const EllipsisRow = styled.div`
@@ -62,13 +111,14 @@ const EllipsisRow = styled.div`
   font-size: 2rem;
   font-weight: bold;
   margin: 0 0 20px 0;
-`;
 
-const NextWeekButton = styled.button`
-  padding: 10px 20px;
-  cursor: pointer;
-  border-radius: 10px;
-  margin-top: 20px;
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {

@@ -6,9 +6,18 @@ const Td = styled.td`
   border: 1px solid black;
   padding: 8px;
   color: white;
+
+  @media (max-width: 768px) {
+    //Scrolling on mobile
+    overflow-x: auto;
+  }
 `;
 const Tr = styled.tr`
   background-color: #251e40;
+
+  @media (max-width: 768px) {
+    padding: 5px;
+  }
 `;
 
 interface Player {
