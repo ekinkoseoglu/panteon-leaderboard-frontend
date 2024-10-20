@@ -31,7 +31,7 @@ Projeyi yerel olarak çalıştırmak için aşağıdaki adımları izleyin:
 ### 1. Depoyu Klonlayın
 ```
 git clone git@github.com:ekinkoseoglu/panteon-leaderboard-frontend.git
-
+```
 ### 2. Proje dizinine gidin
 ```
 cd proje-dizini
@@ -46,7 +46,7 @@ npm install
 
 ### 4. Geliştirme sunucusunu başlatın
 ```
-npm start
+npm run dev
 ```
 
 
