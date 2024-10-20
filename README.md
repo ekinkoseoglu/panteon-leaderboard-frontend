@@ -2,6 +2,9 @@
 
 Bu proje, **Panteon** için geliştirilmiş bir **case çalışması** olup, bir lider tablosu dağıtım sistemini simüle etmektedir. Sistem, oyuncuların lider tablosunu görüntülemesine, çeşitli özelliklere göre oyuncuları filtrelemesine ve grup yapmasına, ayrıca ödül havuzunun dağıtımını yönetmesine olanak tanır.
 
+![image](https://github.com/user-attachments/assets/028445d5-bf57-49ec-a0e9-3e41cd4b5729)
+
+
 ## Proje Özeti
 
 Lider tablosu sistemi aşağıdaki özelliklere sahiptir:
