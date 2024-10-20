@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Panteon Case Study - Lider Tablosu Dağıtım Sistemi
 
-## Getting Started
+Bu proje, **Panteon** için geliştirilmiş bir **case çalışması** olup, bir lider tablosu dağıtım sistemini simüle etmektedir. Sistem, oyuncuların lider tablosunu görüntülemesine, çeşitli özelliklere göre oyuncuları filtrelemesine ve grup yapmasına, ayrıca ödül havuzunun dağıtımını yönetmesine olanak tanır.
 
-First, run the development server:
+## Proje Özeti
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Lider tablosu sistemi aşağıdaki özelliklere sahiptir:
+- **Lider Tablosu Görüntüleme**: Oyuncuları ranklarına göre sıralar ve oyuncu ismi, ülke, para gibi kriterlerle filtreleme seçenekleri sunar.
+- **Oyuncu Arama**: Bir oyuncuyu ID'ye göre arayarak sıralamasını öğrenebilirsiniz.
+- **Ülkeye Göre Gruplama**: Oyuncuları ülkeye göre gruplandırarak bölgesel performans analizleri yapın.
+- **Ödül Dağıtımı**: Ödül havuzunu en üst sıradaki oyunculara dağıtın ve sonraki hafta için havuzu sıfırlayın.
+- **Sonraki Haftayı Simüle Etme**: "Sonraki Hafta" butonuna tıklayarak lider tablosunu yeni bir haftaya taşıyın ve yeni dağıtım turu için verileri yenileyin.
+
+### Kullanılan Teknolojiler:
+- **React**: Kullanıcı arayüzünü oluşturmak için kullanıldı.
+- **TypeScript**: Statik tip desteği sağlayarak hataları azaltmak için kullanıldı.
+- **Styled Components**: Projedeki CSS stillerini yönetmek için kullanıldı.
+- **React Icons**: Arayüzü geliştirmek için ikonlar eklendi.
+- **React Toastify**: Ödül dağıtımı ve hata bildirimleri gibi kullanıcı bilgilendirmeleri için kullanıldı.
+
+## Özellikler:
+- **Lider Tablosu Görüntüleme**: En iyi oyuncuların listesini sıralama ve filtreleme seçenekleriyle görün.
+- **Ödül Dağıtımı**: Ödül havuzunu en üst sıradaki oyunculara dağıtın ve sonraki tur için sıfırlayın.
+- **Sonraki Haftayı Simüle Etme**: Sonraki haftaya geçiş yaparak lider tablosunu yenileyin.
+- **Responsive Tasarım**: Uygulama, farklı cihaz boyutlarında tamamen Responsive olacak şekilde tasarlanmıştır.
+
+## Kurulum Kılavuzu
+
+Projeyi yerel olarak çalıştırmak için aşağıdaki adımları izleyin:
+
+### 1. Depoyu Klonlayın
+```
+git clone git@github.com:ekinkoseoglu/panteon-leaderboard-frontend.git
+
+### 2. Proje dizinine gidin
+```
+cd proje-dizini
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Bağımlılıkları yükleyin
+```
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+### 4. Geliştirme sunucusunu başlatın
+```
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Uygulama `http://localhost:3001` adresinde çalışıyor olacaktır.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Ek Bilgiler
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Ödül Havuzunu Dağıtma**: En üst sıradaki oyunculara ödül havuzunu dağıtmak için butona tıklayın.
+- **Sıfırlama ve Güncelleme**: Her hafta, lider tablosu yeni oyuncular ve sıralamalarla yenilenir, bu da gerçek zamanlı bir senaryo simülasyonu yapar.
+
+
+Kodu inceleyebilir ve özelleştirme yapmak için düzenlemeler yapabilirsiniz!
