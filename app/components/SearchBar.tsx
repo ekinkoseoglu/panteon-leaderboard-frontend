@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ togglePlayerId }) => {
     <form onSubmit={clickHandler} className='mt-5'>
       <input
         data-tooltip-id='my-tooltip'
-        data-tooltip-content='Lütfn oyuncu ID giriniz. (Örnek: 136456)'
+        data-tooltip-content='Lütfn oyuncu ID giriniz. (Örnek: 136)'
         data-tooltip-place='top-start'
         type='number'
         placeholder='Search players...'
