@@ -2,8 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  distributePrizePool,
   fetchLeaderboardData,
   fetchPlayerDataById,
+  nextWeek,
 } from "../utils/leaderboardService";
 import { FaFilter } from "react-icons/fa";
 import styled from "styled-components";
@@ -124,94 +126,85 @@ const EllipsisRow = styled.div`
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [surroundingPlayers, setSurroundingPlayers] = useState<Player[]>([]);
-  const [playerNameRank, setPlayerNameRank] = useState(0);
-  const [playerNameFilter, setPlayerNameFilter] = useState("");
-  const [countryFilter, setCountryFilter] = useState("");
-  const [moneyFilter, setMoneyFilter] = useState("");
+  const [playerNameFilter, setPlayerNameFilter] = useState<string>("");
+  const [countryFilter, setCountryFilter] = useState<string>("");
+  const [moneyFilter, setMoneyFilter] = useState<string>("");
   const [groupedByCountry, setGroupedByCountry] = useState<
     Record<string, Player[]>
   >({});
-  const [isCountryGrouped, setIsCountryGrouped] = useState(false);
-  const [isLoadingLeaderboard, setIsLoadingLeaderboard] = useState(true);
+  const [isCountryGrouped, setIsCountryGrouped] = useState<boolean>(false);
+  const [isLoadingLeaderboard, setIsLoadingLeaderboard] =
+    useState<boolean>(true);
   const [isLoadingSurroundingPlayers, setIsLoadingSurroundingPlayers] =
-    useState(true);
-  const [prizePool, setPrizePool] = useState(0);
+    useState<boolean>(true);
+  const [prizePool, setPrizePool] = useState<number>(0);
   const [isDistributeButtonEnabled, setIsDistributeButtonEnabled] =
-    useState(false);
+    useState<boolean>(false);
+  const [page, setPage] = useState<number>(1);
+  const [pageSize] = useState<number>(20);
 
-  // Leaderboard datasını çekme
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetchLeaderboardData();
-        setPlayers(response.data.topPlayers);
+        const response = await fetchLeaderboardData(page, pageSize);
+        setPlayers(response.data);
         setPrizePool(response.prizePool);
+        setIsLoadingLeaderboard(false);
       } catch (error) {
         console.error("Error fetching leaderboard data", error);
-      } finally {
         setIsLoadingLeaderboard(false);
       }
 
-      if (playerId !== null && prizePool !== 0) {
+      if (playerId !== null && playerId !== undefined && prizePool !== 0) {
         setSurroundingPlayers([]);
         setIsLoadingSurroundingPlayers(true);
-        scrollToBottom();
         try {
           const playerData = await fetchPlayerDataById(playerId);
           setSurroundingPlayers(playerData);
+          setIsLoadingSurroundingPlayers(false);
         } catch (error) {
           console.error("Error fetching player data", error);
-        } finally {
           setIsLoadingSurroundingPlayers(false);
         }
       }
     };
 
     fetchData();
-  }, [playerId, prizePool]);
+  }, [page, pageSize, playerId, prizePool]);
 
   const filteredPlayers = players.filter((player) => {
-    const matchesName = player.name
-      .toLowerCase()
-      .includes(playerNameFilter.toLowerCase());
-    const matchesCountry = player.country
-      .toLowerCase()
-      .includes(countryFilter.toLowerCase());
-    const matchesMoney = player.money.includes(moneyFilter);
-
-    return matchesName && matchesCountry && matchesMoney;
+    return (
+      player.name.toLowerCase().includes(playerNameFilter.toLowerCase()) &&
+      player.country.toLowerCase().includes(countryFilter.toLowerCase()) &&
+      player.money.includes(moneyFilter)
+    );
   });
 
-  const scrollToBottom = () => {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth",
-    });
-  };
-
   const handleGroupByCountry = () => {
-    const grouped = filteredPlayers.reduce<Record<string, Player[]>>(
-      (result, player) => {
-        if (!result[player.country]) {
-          result[player.country] = [];
-        }
-        result[player.country].push(player);
-        return result;
-      },
-      {}
-    );
+    setIsCountryGrouped((prev) => !prev);
 
-    setGroupedByCountry(grouped);
-    setIsCountryGrouped(!isCountryGrouped);
-    scrollToBottom();
+    if (!isCountryGrouped) {
+      const grouped = filteredPlayers.reduce<Record<string, Player[]>>(
+        (result, player) => {
+          if (!result[player.country]) {
+            result[player.country] = [];
+          }
+          result[player.country].push(player);
+          return result;
+        },
+        {}
+      );
+      setGroupedByCountry(grouped);
+    }
   };
 
   const handleDistributePrize = async () => {
     try {
+      await distributePrizePool();
       setPrizePool(0);
-      const response = await fetchLeaderboardData();
-      setPlayers(response.data.topPlayers);
       setIsDistributeButtonEnabled(false);
+      const response = await fetchLeaderboardData(page, pageSize);
+      setPlayers(response.data);
     } catch (error) {
       console.error("Error distributing prize pool", error);
       toast.error("Error distributing prize pool");
@@ -220,37 +213,41 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
 
   const handleNextWeek = async () => {
     try {
-      const response = await fetchLeaderboardData();
-      setPrizePool(response.prizePool);
+      const data = await nextWeek();
+      setPrizePool(data.prizePool);
       setIsDistributeButtonEnabled(true);
     } catch (error) {
       console.error("Error fetching new week data", error);
     }
   };
 
-  const sortedCountries = Object.keys(groupedByCountry).sort((a, b) =>
-    a.localeCompare(b)
-  );
+  const sortedCountries = Object.keys(groupedByCountry).sort();
+
+  const handlePageChange = (newPage: number) => {
+    setIsLoadingLeaderboard(true);
+    setPage(newPage);
+  };
 
   return (
     <>
       <h3 className='text-white'>
         Prize Pool: {isDistributeButtonEnabled ? prizePool : 0}
       </h3>
-      {/* Buton Grupları */}
+
       <div className='d-flex justify-content-between px-5'>
         <ResetButton
           type='button'
           onClick={() => {
             setPlayerNameFilter("");
             setCountryFilter("");
+            setSurroundingPlayers([]);
             setMoneyFilter("");
             setIsCountryGrouped(false);
+            setPage(1);
           }}
         >
           Reset Filters
         </ResetButton>
-
         <DistributePrizePoolButton
           onClick={handleDistributePrize}
           isDistributeButtonEnabled={isDistributeButtonEnabled}
@@ -258,88 +255,90 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
         <NextWeekButton onClick={handleNextWeek}>Next Week</NextWeekButton>
       </div>
       <Container>
-        {/* Filterlar */}
         <FilterContainer>
           <label>
             Player Name:
             <FaFilter
               onClick={() => {
                 const filter = prompt("Enter Player Name:");
-                if (filter !== null) {
-                  setPlayerNameFilter(filter);
-                }
+                if (filter !== null) setPlayerNameFilter(filter);
               }}
             />
           </label>
-
           <label>
             Country:
             <FaFilter onClick={handleGroupByCountry} />
           </label>
-
           <label>
             Money:
             <FaFilter
               onClick={() => {
                 const filter = prompt("Enter Money:");
-                if (filter !== null) {
-                  setMoneyFilter(filter);
-                }
+                if (filter !== null) setMoneyFilter(filter);
               }}
             />
           </label>
         </FilterContainer>
 
-        {/* Top Playerlar için Tablo */}
         {isLoadingLeaderboard ? (
-          <div className='d-flex justify-content-center'>
-            <div className='spinner-border text-primary' role='status'>
-              <span className='visually-hidden'>Loading...</span>
-            </div>
+          <div className='spinner-border text-primary' role='status'>
+            <span className='visually-hidden'>Loading...</span>
           </div>
         ) : isCountryGrouped ? null : (
-          <div style={{ width: "80%", overflow: "hidden" }}>
-            <Table>
-              <tbody>
-                {filteredPlayers.map((player) => (
-                  <PlayerRow
-                    key={player.id}
-                    player={player}
-                    highlightedPlayerId={playerId}
-                  />
-                ))}
-              </tbody>
-            </Table>
-            {playerId !== null && surroundingPlayers.length !== 0 && (
-              <EllipsisRow>
-                <div>...</div>
-              </EllipsisRow>
-            )}
-
-            {/* İlişkili Oyuncular için Tablo */}
-            {playerId !== null && isLoadingSurroundingPlayers ? (
-              <div className='spinner-border text-center mt-2' role='status'>
-                <span className='visually-hidden'>Loading...</span>
-              </div>
-            ) : (
-              surroundingPlayers.length !== 0 && (
-                <Table>
-                  <tbody>
-                    {surroundingPlayers.map((player) => (
-                      <PlayerRow
-                        key={player.id}
-                        player={player}
-                        highlightedPlayerId={playerId}
-                      />
-                    ))}
-                  </tbody>
-                </Table>
-              )
-            )}
-          </div>
+          <>
+            <div style={{ width: "80%", overflow: "hidden" }}>
+              {playerId !== null &&
+              playerId !== undefined &&
+              isLoadingSurroundingPlayers ? (
+                <div className='spinner-border text-center mt-2' role='status'>
+                  <span className='visually-hidden'>Loading...</span>
+                </div>
+              ) : (
+                surroundingPlayers.length !== 0 && (
+                  <Table>
+                    <tbody>
+                      {surroundingPlayers.map((player) => (
+                        <PlayerRow
+                          key={player.id}
+                          player={player}
+                          highlightedPlayerId={playerId}
+                        />
+                      ))}
+                    </tbody>
+                  </Table>
+                )
+              )}
+              {playerId !== null &&
+                playerId !== undefined &&
+                surroundingPlayers.length !== 0 && (
+                  <EllipsisRow>
+                    <div>...</div>
+                  </EllipsisRow>
+                )}
+              <Table>
+                <tbody>
+                  {filteredPlayers.map((player) => (
+                    <PlayerRow
+                      key={player.id}
+                      player={player}
+                      highlightedPlayerId={playerId}
+                    />
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+            <div className='pagination'>
+              <button
+                onClick={() => handlePageChange(page - 1)}
+                disabled={page === 1}
+              >
+                Previous
+              </button>
+              <span>Page {page}</span>
+              <button onClick={() => handlePageChange(page + 1)}>Next</button>
+            </div>
+          </>
         )}
-
-        {/* Ülkelere Göre Gruplandırılmış Tablo */}
         {isCountryGrouped &&
           sortedCountries.map((country) => (
             <div key={country} className='w-75'>
@@ -358,7 +357,6 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
             </div>
           ))}
       </Container>
-
       <ToastContainer
         position='bottom-right'
         autoClose={3000}
