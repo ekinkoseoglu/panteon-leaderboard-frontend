@@ -12,10 +12,6 @@ const HomePage: React.FC = () => {
     setPlayerId(playerId);
   };
 
-  const resetPlayerId = () => {
-    setPlayerId(null);
-  };
-
   return (
     <div
       style={{

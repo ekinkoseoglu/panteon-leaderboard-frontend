@@ -213,7 +213,8 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
       const response = await fetchLeaderboardData(page, pageSize);
       setPlayers(response.data);
     } catch (error) {
-      toast.error("Error distributing prize pool");
+      console.error("Error distributing prize pool", error);
+      toast.error("Ödül havuzu dağıtılamadı!");
     }
   };
 
