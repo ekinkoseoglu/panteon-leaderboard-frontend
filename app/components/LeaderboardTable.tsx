@@ -141,7 +141,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
   const [isDistributeButtonEnabled, setIsDistributeButtonEnabled] =
     useState<boolean>(false);
   const [page, setPage] = useState<number>(1);
-  const [pageSize] = useState<number>(20);
+  const [pageSize] = useState<number>(100);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -334,7 +334,25 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
               >
                 Previous
               </button>
-              <span>Page {page}</span>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "0 20px",
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: "#f0f0f0",
+                    margin: "0 10px",
+                  }}
+                >
+                  {page}
+                </span>
+              </div>
               <button onClick={() => handlePageChange(page + 1)}>Next</button>
             </div>
           </>

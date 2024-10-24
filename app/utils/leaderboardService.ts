@@ -21,7 +21,7 @@ interface Player {
 
 export const fetchLeaderboardData = async (
   page: number = 1,
-  pageSize: number = 20
+  pageSize: number = 100
 ): Promise<LeaderboardResponse> => {
   try {
     const response = await axios.get<LeaderboardResponse>(API_URL, {
