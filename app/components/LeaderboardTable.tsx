@@ -25,6 +25,7 @@ interface LeaderboardTableProps {
   playerId: number | null;
 }
 
+// Tabloya ait stil tanımlamaları
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -124,6 +125,8 @@ const EllipsisRow = styled.div`
 `;
 
 const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
+  // Oyuncu ve ödül havuzuna ait state'lerin yönetimi
+
   const [players, setPlayers] = useState<Player[]>([]);
   const [surroundingPlayers, setSurroundingPlayers] = useState<Player[]>([]);
   const [playerNameFilter, setPlayerNameFilter] = useState<string>("");
@@ -143,7 +146,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
   const [page, setPage] = useState<number>(1);
   const [pageSize] = useState<number>(100);
 
-  // Sayfa ve diğer bağımlılıklara göre veri çekme işlemi
+  // Sayfa ve bağımlılıklara göre oyuncu verilerini çeken useEffect
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -156,6 +159,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
         setIsLoadingLeaderboard(false);
       }
 
+      // Belirli bir oyuncuya ait veriyi çekme işlemi
       if (playerId !== null && playerId !== undefined && prizePool !== 0) {
         setSurroundingPlayers([]);
         setIsLoadingSurroundingPlayers(true);
@@ -173,6 +177,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
     fetchData();
   }, [page, pageSize, playerId, prizePool]);
 
+  // Filtreleme işlemleri için oyuncu verilerini filtreler
   const filteredPlayers = players.filter((player) => {
     return (
       player.name.toLowerCase().includes(playerNameFilter.toLowerCase()) &&
@@ -199,6 +204,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
     }
   };
 
+  // Ödül havuzunu dağıtan fonksiyon
   const handleDistributePrize = async () => {
     try {
       await distributePrizePool();
@@ -207,11 +213,11 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
       const response = await fetchLeaderboardData(page, pageSize);
       setPlayers(response.data);
     } catch (error) {
-      console.error("Error distributing prize pool", error);
       toast.error("Error distributing prize pool");
     }
   };
 
+  // Yeni haftaya geçiş işlemi
   const handleNextWeek = async () => {
     try {
       const data = await nextWeek();
