@@ -21,7 +21,7 @@ interface Player {
 
 export const fetchLeaderboardData = async (
   page: number = 1,
-  pageSize: number = 100
+  pageSize: number = 20
 ): Promise<LeaderboardResponse> => {
   try {
     const response = await axios.get<LeaderboardResponse>(API_URL, {
@@ -60,7 +60,7 @@ export const distributePrizePool = async (): Promise<void> => {
 export const nextWeek = async () => {
   try {
     const response = await axios.get(`${API_URL}/nextWeek`);
-    return response;
+    return response.data;
   } catch (error) {
     console.error("Error going to next week", error);
     throw error;

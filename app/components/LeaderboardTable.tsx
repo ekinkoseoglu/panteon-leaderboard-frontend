@@ -143,6 +143,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
   const [page, setPage] = useState<number>(1);
   const [pageSize] = useState<number>(100);
 
+  // Sayfa ve diğer bağımlılıklara göre veri çekme işlemi
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -214,7 +215,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
   const handleNextWeek = async () => {
     try {
       const data = await nextWeek();
-      setPrizePool(data.prizePool);
+      setPrizePool(data);
       setIsDistributeButtonEnabled(true);
     } catch (error) {
       console.error("Error fetching new week data", error);
@@ -246,7 +247,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
             setPage(1);
           }}
         >
-          Reset Filters
+          Filtreleri Sıfırla
         </ResetButton>
         <DistributePrizePoolButton
           onClick={handleDistributePrize}
@@ -257,23 +258,23 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
       <Container>
         <FilterContainer>
           <label>
-            Player Name:
+            Oyuncu Adı:
             <FaFilter
               onClick={() => {
-                const filter = prompt("Enter Player Name:");
+                const filter = prompt("Oyuncu Adı Girin:");
                 if (filter !== null) setPlayerNameFilter(filter);
               }}
             />
           </label>
           <label>
-            Country:
+            Ülke:
             <FaFilter onClick={handleGroupByCountry} />
           </label>
           <label>
-            Money:
+            Para:
             <FaFilter
               onClick={() => {
-                const filter = prompt("Enter Money:");
+                const filter = prompt("Para Girin:");
                 if (filter !== null) setMoneyFilter(filter);
               }}
             />
@@ -282,7 +283,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
 
         {isLoadingLeaderboard ? (
           <div className='spinner-border text-primary' role='status'>
-            <span className='visually-hidden'>Loading...</span>
+            <span className='visually-hidden'>Yükleniyor...</span>
           </div>
         ) : isCountryGrouped ? null : (
           <>
@@ -291,7 +292,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
               playerId !== undefined &&
               isLoadingSurroundingPlayers ? (
                 <div className='spinner-border text-center mt-2' role='status'>
-                  <span className='visually-hidden'>Loading...</span>
+                  <span className='visually-hidden'>Yükleniyor...</span>
                 </div>
               ) : (
                 surroundingPlayers.length !== 0 && (
@@ -332,7 +333,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
                 onClick={() => handlePageChange(page - 1)}
                 disabled={page === 1}
               >
-                Previous
+                Önceki
               </button>
               <div
                 style={{
@@ -353,7 +354,9 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
                   {page}
                 </span>
               </div>
-              <button onClick={() => handlePageChange(page + 1)}>Next</button>
+              <button onClick={() => handlePageChange(page + 1)}>
+                Sonraki
+              </button>
             </div>
           </>
         )}
