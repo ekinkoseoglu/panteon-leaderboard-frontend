@@ -8,6 +8,7 @@ Bu proje, **Panteon** için geliştirilmiş bir **case çalışması** olup, bir
 ## Proje Özeti
 
 Lider tablosu sistemi aşağıdaki özelliklere sahiptir:
+- **Oyuncu Id Arama**: Bir oyun içinde birden fazla aynı isimde oyuncu olabilme ihtimali olduğu için oyuncu araması ID üzerinden gerçekleşmektedir. Lütfen arayacağınız oyuncunun numarası yerine idsini arayın.
 - **Lider Tablosu Görüntüleme**: Oyuncuları ranklarına göre sıralar ve oyuncu ismi, ülke, para gibi kriterlerle filtreleme seçenekleri sunar.
 - **Oyuncu Arama**: Bir oyuncuyu ID'ye göre arayarak sıralamasını öğrenebilirsiniz.
 - **Ülkeye Göre Gruplama**: Oyuncuları ülkeye göre gruplandırarak bölgesel performans analizleri yapın.
@@ -57,7 +58,6 @@ Uygulama `http://localhost:3001` adresinde çalışıyor olacaktır.
 
 
 ## Ek Bilgiler
-
 
 - **Ödül Havuzunu Dağıtma**: En üst sıradaki oyunculara ödül havuzunu dağıtmak için butona tıklayın.
 - **Sıfırlama ve Güncelleme**: Her hafta, lider tablosu yeni oyuncular ve sıralamalarla yenilenir, bu da gerçek zamanlı bir senaryo simülasyonu yapar.
