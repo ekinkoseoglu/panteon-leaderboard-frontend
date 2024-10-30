@@ -69,9 +69,10 @@ const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 10px;
+  justify-self: center;
 
   @media (max-width: 768px) {
-    width: 90%;
+    width: 100%;
   }
 
   @media (max-width: 480px) {
@@ -294,6 +295,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ playerId }) => {
           </div>
         ) : isCountryGrouped ? null : (
           <>
+            <div className='d-flex flex-column align-items-center justify-content-center'></div>
             <div style={{ width: "80%", overflow: "hidden" }}>
               {playerId !== null &&
               playerId !== undefined &&
