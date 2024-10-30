@@ -1,3 +1,4 @@
+import Image from "next/image";
 import React from "react";
 
 const Header = () => {
@@ -10,7 +11,7 @@ const Header = () => {
       }}
       className='p-0 m-0'
     >
-      <img
+      <Image
         src='https://www.panteon.games/wp-content/uploads/2022/06/1661xlogo.png'
         alt='Arkus Nexus Logo'
         style={{
